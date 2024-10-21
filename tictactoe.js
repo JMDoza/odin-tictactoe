@@ -12,17 +12,25 @@ function gameboard() {
 
   function printGameboard() {
     board.forEach((innerArray) => {
-      console.log(innerArray.toString());
+      console.log(innerArray);
     });
   }
 
   return { printGameboard };
 }
 
-function players(name) {}
+function player(name, symbol) {
+  function getName() {
+    return name;
+  }
+  function getSymbol() {
+    return symbol;
+  }
+  return { getName, getSymbol };
+}
 
 function gameController() {}
 
 const gameTTT = gameboard();
 
-// gameTTT.printGameboard()
+const jake = player("jake", 1);
