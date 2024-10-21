@@ -45,6 +45,8 @@ function gameController() {
     board.printGameboard();
   };
 
+  print();
+
   const getCurrentPlayer = () => {
     return currentPlayer;
   };
@@ -53,7 +55,13 @@ function gameController() {
     currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
   };
 
-  return { print, getCurrentPlayer, nextPlayerTurn };
+  const playRound = (row, column) => {
+    board.placeSymbol(row, column, getCurrentPlayer());
+    nextPlayerTurn();
+    print();
+  };
+
+  return { print, getCurrentPlayer, playRound };
 }
 
 const game = gameController();
