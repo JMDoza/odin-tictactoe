@@ -6,31 +6,54 @@ function gameboard() {
   for (let i = 0; i < row; i++) {
     board[i] = [];
     for (let j = 0; j < column; j++) {
-      board[i].push([]);
+      board[i].push([" "]);
     }
   }
 
-  function printGameboard() {
+  const printGameboard = () => {
     board.forEach((innerArray) => {
-      console.log(innerArray);
+      console.log(innerArray.toString());
     });
-  }
+  };
 
-  return { printGameboard };
+  const placeSymbol = (row, column, player) => {
+    board[row][column] = player.getSymbol();
+  };
+
+  return { printGameboard, placeSymbol };
 }
 
 function player(name, symbol) {
-  function getName() {
+  const getName = () => {
     return name;
-  }
-  function getSymbol() {
+  };
+  const getSymbol = () => {
     return symbol;
-  }
+  };
+
   return { getName, getSymbol };
 }
 
-function gameController() {}
+function gameController() {
+  const board = gameboard();
 
-const gameTTT = gameboard();
+  let players = [player("player1", 0), player("player2", 1)];
 
-const jake = player("jake", 1);
+  let currentPlayer = players[0];
+
+  const print = () => {
+    board.printGameboard();
+  };
+
+  const getCurrentPlayer = () => {
+    return currentPlayer;
+  };
+
+  const nextPlayerTurn = () => {
+    currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
+  };
+
+  return { print, getCurrentPlayer, nextPlayerTurn };
+}
+
+const game = gameController();
