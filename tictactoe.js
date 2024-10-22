@@ -1,10 +1,11 @@
 function gameboard() {
   const row = 3;
   const col = 3;
+  const winCondition = 3;
+  const maxSymbols = 9;
   let board = [];
 
-  let player1Counter = 0;
-  let player2Coutner = 0;
+  let totalSymbols = 0;
 
   for (let i = 0; i < row; i++) {
     board[i] = [];
@@ -30,6 +31,7 @@ function gameboard() {
   const placeSymbol = (row, col, player) => {
     board[row][col] = player.getSymbol();
     winCheck(row, col, player);
+    tieCheck();
   };
 
   const winCheck = (row, col, player) => {
@@ -51,7 +53,10 @@ function gameboard() {
         console.log(`${player.getName()} | Cols: [${i}] [${col}]`);
       }
 
-      if (symbolRowCounter >= 3 || symbolColCounter >= 3) {
+      if (
+        symbolRowCounter >= winCondition ||
+        symbolColCounter >= winCondition
+      ) {
         return;
       }
     }
@@ -69,17 +74,30 @@ function gameboard() {
           console.log(`${player.getName()} | Diagonals 2: [${i}] [${j}]`);
         }
         j--;
+        if (
+          symbolPriamryDiagonalCounter >= winCondition ||
+          symbolSecondaryDiagonalCounter >= winCondition
+        ) {
+          return;
+        }
       }
     }
 
     if (
-      symbolRowCounter >= 3 ||
-      symbolColCounter >= 3 ||
-      symbolPriamryDiagonalCounter >= 3 ||
-      symbolSecondaryDiagonalCounter >= 3
+      symbolRowCounter >= winCondition ||
+      symbolColCounter >= winCondition ||
+      symbolPriamryDiagonalCounter >= winCondition ||
+      symbolSecondaryDiagonalCounter >= winCondition
     ) {
       console.log("WINNER");
     }
+  };
+
+  const tieCheck = () => {
+    if (totalSymbols >= maxSymbols) {
+      console.log("TIE");
+    }
+    totalSymbols++;
   };
 
   return { printGameboard, placeSymbol };
