@@ -3,8 +3,8 @@ function gameboard() {
   const col = 3;
   const winCondition = 3;
   const maxSymbols = 9;
-  let board = [];
 
+  let board = [];
   let totalSymbols = 0;
 
   for (let i = 0; i < row; i++) {
@@ -32,7 +32,6 @@ function gameboard() {
     if (board[row][col] == 0) {
       board[row][col] = player.getSymbol();
       winCheck(row, col, player);
-      tieCheck();
       return true;
     } else {
       return false;
@@ -57,13 +56,6 @@ function gameboard() {
         symbolColCounter++;
         console.log(`${player.getName()} | Cols: [${i}] [${col}]`);
       }
-
-      //   if (
-      //     symbolRowCounter >= winCondition ||
-      //     symbolColCounter >= winCondition
-      //   ) {
-      //     return;
-      //   }
     }
 
     if (row === col || row + col === 2) {
@@ -79,12 +71,6 @@ function gameboard() {
           console.log(`${player.getName()} | Diagonals 2: [${i}] [${j}]`);
         }
         j--;
-        // if (
-        //   symbolPriamryDiagonalCounter >= winCondition ||
-        //   symbolSecondaryDiagonalCounter >= winCondition
-        // ) {
-        //   return;
-        // }
       }
     }
 
@@ -95,6 +81,8 @@ function gameboard() {
       symbolSecondaryDiagonalCounter >= winCondition
     ) {
       console.log("WINNER");
+    } else {
+      tieCheck();
     }
   };
 
