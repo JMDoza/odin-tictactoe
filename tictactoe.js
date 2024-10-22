@@ -10,7 +10,7 @@ function gameboard() {
   for (let i = 0; i < row; i++) {
     board[i] = [];
     for (let j = 0; j < col; j++) {
-      board[i].push([" "]);
+      board[i].push([0]);
     }
   }
 
@@ -29,9 +29,14 @@ function gameboard() {
   };
 
   const placeSymbol = (row, col, player) => {
-    board[row][col] = player.getSymbol();
-    winCheck(row, col, player);
-    tieCheck();
+    if (board[row][col] == 0) {
+      board[row][col] = player.getSymbol();
+      winCheck(row, col, player);
+      tieCheck();
+      return true;
+    } else {
+      return false;
+    }
   };
 
   const winCheck = (row, col, player) => {
@@ -53,12 +58,12 @@ function gameboard() {
         console.log(`${player.getName()} | Cols: [${i}] [${col}]`);
       }
 
-      if (
-        symbolRowCounter >= winCondition ||
-        symbolColCounter >= winCondition
-      ) {
-        return;
-      }
+      //   if (
+      //     symbolRowCounter >= winCondition ||
+      //     symbolColCounter >= winCondition
+      //   ) {
+      //     return;
+      //   }
     }
 
     if (row === col || row + col === 2) {
@@ -74,12 +79,12 @@ function gameboard() {
           console.log(`${player.getName()} | Diagonals 2: [${i}] [${j}]`);
         }
         j--;
-        if (
-          symbolPriamryDiagonalCounter >= winCondition ||
-          symbolSecondaryDiagonalCounter >= winCondition
-        ) {
-          return;
-        }
+        // if (
+        //   symbolPriamryDiagonalCounter >= winCondition ||
+        //   symbolSecondaryDiagonalCounter >= winCondition
+        // ) {
+        //   return;
+        // }
       }
     }
 
@@ -94,10 +99,10 @@ function gameboard() {
   };
 
   const tieCheck = () => {
+    totalSymbols++;
     if (totalSymbols >= maxSymbols) {
       console.log("TIE");
     }
-    totalSymbols++;
   };
 
   return { printGameboard, placeSymbol };
@@ -117,11 +122,12 @@ function player(name, symbol) {
 const game = (function gameController() {
   const board = gameboard();
 
-  let players = [player("player1", 0), player("player2", 1)];
+  let players = [player("player1", 1), player("player2", 2)];
 
   let currentPlayer = players[0];
 
   const print = () => {
+    console.log(getCurrentPlayer().getName() + " Turn");
     board.printGameboard();
   };
 
@@ -134,8 +140,9 @@ const game = (function gameController() {
   };
 
   const playRound = (row, col) => {
-    board.placeSymbol(row, col, getCurrentPlayer());
-    nextPlayerTurn();
+    if (board.placeSymbol(row, col, getCurrentPlayer())) {
+      nextPlayerTurn();
+    }
     print();
   };
 
