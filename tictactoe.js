@@ -7,6 +7,7 @@ function gameboard() {
   let board = [];
   let totalSymbols = 0;
 
+  // Initialize the board with empty arrays
   for (let i = 0; i < row; i++) {
     board[i] = [];
     for (let j = 0; j < col; j++) {
@@ -28,6 +29,10 @@ function gameboard() {
     });
   };
 
+  /* 
+    Uses the player's symbol to place on the board and checks if there is a
+    winner every time 
+  */
   const placeSymbol = (row, col, player) => {
     if (board[row][col] == 0) {
       board[row][col] = player.getSymbol();
@@ -38,37 +43,47 @@ function gameboard() {
     }
   };
 
+  /* 
+    Currently when there is a winner the game still triggers the next
+    players turn
+  */
   const winCheck = (row, col, player) => {
     const rowLength = getRowLen();
 
+    // Counters to keep track of how many of the players symbols there are
     let symbolRowCounter = 0;
     let symbolColCounter = 0;
     let symbolPriamryDiagonalCounter = 0;
     let symbolSecondaryDiagonalCounter = 0;
 
+    let playerSymbol = player.getSymbol();
+    let playerName = player.getName();
+
+    // Single loop to check the row and column
     for (let i = 0; i < rowLength; i++) {
-      if (board[row][i] === player.getSymbol()) {
+      if (board[row][i] === playerSymbol) {
         symbolRowCounter++;
-        console.log(`${player.getName()} | Rows: [${row}] [${i}]`);
+        console.log(`${playerName} | Rows: [${row}] [${i}]`);
       }
 
-      if (board[i][col] === player.getSymbol()) {
+      if (board[i][col] === playerSymbol) {
         symbolColCounter++;
-        console.log(`${player.getName()} | Cols: [${i}] [${col}]`);
+        console.log(`${playerName} | Cols: [${i}] [${col}]`);
       }
     }
 
+    // Single loop to check the two diagonals
     if (row === col || row + col === 2) {
       let j = getColLen() - 1;
       for (let i = 0; i < rowLength; i++) {
-        if (row === col && board[i][i] === player.getSymbol()) {
+        if (row === col && board[i][i] === playerSymbol) {
           symbolPriamryDiagonalCounter++;
-          console.log(`${player.getName()} | Diagonals 1: [${i}] [${i}]`);
+          console.log(`${playerName} | Diagonals 1: [${i}] [${i}]`);
         }
 
-        if (row + col === 2 && board[i][j] === player.getSymbol()) {
+        if (row + col === 2 && board[i][j] === playerSymbol) {
           symbolSecondaryDiagonalCounter++;
-          console.log(`${player.getName()} | Diagonals 2: [${i}] [${j}]`);
+          console.log(`${playerName} | Diagonals 2: [${i}] [${j}]`);
         }
         j--;
       }
@@ -80,7 +95,7 @@ function gameboard() {
       symbolPriamryDiagonalCounter >= winCondition ||
       symbolSecondaryDiagonalCounter >= winCondition
     ) {
-      console.log("WINNER");
+      console.log(player.getName() + "WINNER");
     } else {
       tieCheck();
     }
@@ -127,6 +142,10 @@ const game = (function gameController() {
     currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
   };
 
+  /*
+    placeSymbol function returns a boolean, if true then the player
+    was able to take their turn
+  */
   const playRound = (row, col) => {
     if (board.placeSymbol(row, col, getCurrentPlayer())) {
       nextPlayerTurn();

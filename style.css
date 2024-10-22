@@ -1,0 +1,11 @@
+.container {
+  display: grid;
+  height: 100vh;
+  grid-template-rows: 1fr 3fr 1fr 1fr;
+}
+
+.game-container {
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  grid-template-rows: repeat(3, 200px);
+}
