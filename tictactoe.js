@@ -48,6 +48,9 @@ function gameboard() {
     players turn
   */
   const winCheck = (row, col, player) => {
+    row = parseInt(row);
+    col = parseInt(col);
+
     const rowLength = getRowLen();
 
     // Counters to keep track of how many of the players symbols there are
@@ -63,12 +66,12 @@ function gameboard() {
     for (let i = 0; i < rowLength; i++) {
       if (board[row][i] === playerSymbol) {
         symbolRowCounter++;
-        console.log(`${playerName} | Rows: [${row}] [${i}]`);
+        // console.log(`${playerName} | Rows: [${row}] [${i}]`);
       }
 
       if (board[i][col] === playerSymbol) {
         symbolColCounter++;
-        console.log(`${playerName} | Cols: [${i}] [${col}]`);
+        // console.log(`${playerName} | Cols: [${i}] [${col}]`);
       }
     }
 
@@ -165,6 +168,17 @@ const game = (function gameController() {
     }
     print();
   };
+
+  (function initClickListeners() {
+    const cells = document.querySelectorAll(".cell");
+    cells.forEach((cell) => {
+      cell.addEventListener("click", () => {
+        const row = cell.dataset.row;
+        const col = cell.dataset.col;
+        game.playRound(`${row}`, `${col}`);
+      });
+    });
+  })();
 
   print();
 
