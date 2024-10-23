@@ -48,9 +48,6 @@ function gameboard() {
     players turn
   */
   const winCheck = (row, col, player) => {
-    row = parseInt(row);
-    col = parseInt(col);
-
     const rowLength = getRowLen();
 
     // Counters to keep track of how many of the players symbols there are
@@ -98,7 +95,7 @@ function gameboard() {
       symbolDiagonalCounter_1 >= winCondition ||
       symbolDiagonalCounter_2 >= winCondition
     ) {
-      console.log(player.getName() + "WINNER");
+      console.log(player.getName() + " WINNER");
     } else {
       tieCheck();
     }
@@ -173,9 +170,10 @@ const game = (function gameController() {
     const cells = document.querySelectorAll(".cell");
     cells.forEach((cell) => {
       cell.addEventListener("click", () => {
-        const row = cell.dataset.row;
-        const col = cell.dataset.col;
-        game.playRound(`${row}`, `${col}`);
+        // converts to numerical value
+        const row = +cell.dataset.row;
+        const col = +cell.dataset.col;
+        game.playRound(row, col);
       });
     });
   })();
