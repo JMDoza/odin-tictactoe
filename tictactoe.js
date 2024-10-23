@@ -53,8 +53,8 @@ function gameboard() {
     // Counters to keep track of how many of the players symbols there are
     let symbolRowCounter = 0;
     let symbolColCounter = 0;
-    let symbolPriamryDiagonalCounter = 0;
-    let symbolSecondaryDiagonalCounter = 0;
+    let symbolDiagonalCounter_1 = 0; // (0,0) to (2,2)
+    let symbolDiagonalCounter_2 = 0; // (2,0) to (0,2)
 
     let playerSymbol = player.getSymbol();
     let playerName = player.getName();
@@ -77,12 +77,12 @@ function gameboard() {
       let j = getColLen() - 1;
       for (let i = 0; i < rowLength; i++) {
         if (row === col && board[i][i] === playerSymbol) {
-          symbolPriamryDiagonalCounter++;
+          symbolDiagonalCounter_1++;
           console.log(`${playerName} | Diagonals 1: [${i}] [${i}]`);
         }
 
         if (row + col === 2 && board[i][j] === playerSymbol) {
-          symbolSecondaryDiagonalCounter++;
+          symbolDiagonalCounter_2++;
           console.log(`${playerName} | Diagonals 2: [${i}] [${j}]`);
         }
         j--;
@@ -92,8 +92,8 @@ function gameboard() {
     if (
       symbolRowCounter >= winCondition ||
       symbolColCounter >= winCondition ||
-      symbolPriamryDiagonalCounter >= winCondition ||
-      symbolSecondaryDiagonalCounter >= winCondition
+      symbolDiagonalCounter_1 >= winCondition ||
+      symbolDiagonalCounter_2 >= winCondition
     ) {
       console.log(player.getName() + "WINNER");
     } else {
@@ -122,8 +122,19 @@ function player(name, symbol) {
   return { getName, getSymbol };
 }
 
+function renderer() {
+  const renderSymbol = (row, col, player) => {
+    const cell = document.querySelector(
+      `[data-row="${row}"][data-col="${col}"]`
+    );
+    cell.textContent = player.getSymbol();
+  };
+  return { renderSymbol };
+}
+
 const game = (function gameController() {
   const board = gameboard();
+  const gameRenderer = renderer();
 
   let players = [player("player1", 1), player("player2", 2)];
 
@@ -147,7 +158,9 @@ const game = (function gameController() {
     was able to take their turn
   */
   const playRound = (row, col) => {
-    if (board.placeSymbol(row, col, getCurrentPlayer())) {
+    const player = getCurrentPlayer();
+    if (board.placeSymbol(row, col, player)) {
+      gameRenderer.renderSymbol(row, col, player);
       nextPlayerTurn();
     }
     print();
